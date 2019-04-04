@@ -2,7 +2,7 @@ FROM ubuntu:16.04 as ppy-builder
 MAINTAINER PeerPlays Witnesses
 
 ARG BRANCH_NAME=beatrice
-ARG COMMIT=3e58dc5a1120420b64cbbee51b3d9e02c624215c
+ARG COMMIT=fd71c4b682ba158783bd9ef5ee20d857e86ac6bf
 
 RUN \
         apt-get update && \
