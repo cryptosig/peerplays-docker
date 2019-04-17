@@ -1,8 +1,5 @@
 FROM ubuntu:16.04 as ppy-builder
-MAINTAINER PeerPlays Witnesses
-
-ARG BRANCH_NAME=1.0.0
-ARG COMMIT=0dc7e8b784b54ef6b75c1d00f9e881673b0edb38
+MAINTAINER blckchnd
 
 RUN \
         apt-get update && \
@@ -25,6 +22,9 @@ RUN \
         && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+ARG BRANCH_NAME=1.1.0
+ARG COMMIT=320782b61e7ebe49a06f8703ccb409f37efc1958
 
 RUN \
     git clone https://github.com/peerplays-network/peerplays /source  && \
