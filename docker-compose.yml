@@ -1,5 +1,16 @@
-version: '3'
+version: '2'
 services:
+
+ nginx:
+  #
+  # nginx
+  # =========
+  #
+  # This service can be used as a reverse proxy for an API node
+  # 
+  build: nginx-dir/
+  ports:
+   - "0.0.0.0:443:8080"
 
  seed:
   #
@@ -9,11 +20,8 @@ services:
   # This service can be used to deploy a seed node that exposes the P2P
   # port to the internet at port 6666 (change below)
   #
-  image: blckchnd/peerplays-beatrice:latest
-  build:
-    context: ./dkr
+  image: peerplays-network:test-1.4.5
   environment:
-   - 'PEERPLAYSD_SEED_NODES=ppy-beatrice-seed.blckchnd.com:6666'
    - 'PEERPLAYSD_P2P_ENDPOINT=0.0.0.0:6666'
    - 'PEERPLAYSD_REPLAY=Yes'   # Replays if the variable exists
   ports:
@@ -21,15 +29,15 @@ services:
   volumes:
    - "./seed:/var/lib/peerplays"
 
- api:
+ node:
   #
-  # API
+  # Node
   # ====
   #
   # This service can be used to deploy a full node that exposes the RPC
   # port to the internet at port 8090 (change below)
   #
-  image: blckchnd/peerplays-beatrice:latest
+  image: peerplays-network:test-1.4.5
   depends_on:
    - seed
   ports:
@@ -37,9 +45,8 @@ services:
   environment:
    - 'PEERPLAYSD_REPLAY=Yes'   # Replays if the variable exists
    - 'PEERPLAYSD_RPC_ENDPOINT=0.0.0.0:8090'
-   - 'PEERPLAYSD_SEED_NODES=seed:6666 ppy-beatrice-seed.blckchnd.com:6666'
   volumes:
-  - "./api:/var/lib/peerplays"
+  - "./node:/var/lib/peerplays"
 
  witness:
   #
@@ -51,13 +58,12 @@ services:
   # NOTE:
   # Please change the private key and witness id accordingly!!
   #
-  image: blckchnd/peerplays-beatrice:latest
+  image: peerplays-network:test-1.4.5
   depends_on:
    - seed
   environment:
    - 'PEERPLAYSD_PRIVATE_KEY=["TEST...","5..."]'
    - 'PEERPLAYSD_WITNESS_ID="1.6.x"'
-   - 'PEERPLAYSD_SEED_NODES=seed:6666 ppy-beatrice-seed.blckchnd.com:6666'
    - 'PEERPLAYSD_REPLAY=Yes'   # Replays if the variable exists
   volumes:
   - "./witness:/var/lib/peerplays"
